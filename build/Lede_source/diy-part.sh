@@ -8,7 +8,7 @@
 
 
 cat >$NETIP <<-EOF
-uci set network.lan.ipaddr='192.168.2.1'                      # IPv4 地址(openwrt后台地址)
+uci set network.lan.ipaddr='192.168.2.2'                      # IPv4 地址(openwrt后台地址)
 uci set network.lan.netmask='255.255.255.0'                   # IPv4 子网掩码
 #uci set network.lan.gateway='192.168.2.1'                    # 旁路由设置 IPv4 网关（去掉uci前面的#生效）
 #uci set network.lan.broadcast='192.168.2.255'                # 旁路由设置 IPv4 广播（去掉uci前面的#生效）
@@ -18,7 +18,7 @@ uci set dhcp.@dnsmasq[0].filter_aaaa='1'                      # 禁止解析 IPv
 
 #uci set dhcp.lan.ignore='1'                                  # 旁路由关闭DHCP功能（去掉uci前面的#生效）
 #uci delete network.lan.type                                  # 旁路由去掉桥接模式（去掉uci前面的#生效）
-uci set system.@system[0].hostname='OpenWrt'              # 修改主机名称为OpenWrt-123
+uci set system.@system[0].hostname='OpenWrt-123'              # 修改主机名称为OpenWrt-123
 #uci set ttyd.@ttyd[0].command='/bin/login -f root'           # 设置ttyd免帐号登录（去掉uci前面的#生效）
 
 # 如果有用IPV6的话,可以使用以下命令创建IPV6客户端(LAN口)（去掉全部代码uci前面#号生效）
@@ -33,29 +33,6 @@ EOF
 
 # 把bootstrap替换成argon为源码必选主题（可自行修改您要的,主题名称必须对,比如下面代码的[argon],源码内必须有该主题,要不然编译失败）
 sed -i "s/bootstrap/argon/ig" feeds/luci/collections/luci/Makefile
-
-#删除lede自带argon主题
-#rm -rf ./feeds/luci/themes/luci-theme-argon
-
-#删除danshui argon主题
-#rm -rf ./feeds/danshui/luci-theme-argon
-#rm -rf ./feeds/danshui/luci-app-argon-config
-
-#clone jerrykuku themes
-#git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git ./package/luci-theme-argon
-#git clone https://github.com/jerrykuku/luci-app-argon-config.git ./package/luci-app-argon-config
-
-# Change default BackGround img
-wget -O ./danshui/luci-theme-argon/htdocs/luci-static/argon/img/bg1.jpg https://github.com/lddkooo/diy-OpenWrt/blob/main/BackGround/1.jpg
-
-#Change default icon img
-svn co https://github.com/xylz0928/luci-mod/trunk/feeds/luci/modules/luci-base/htdocs/luci-static/resources/icons ./package/lucimod
-mv package/lucimod/* feeds/luci/modules/luci-base/htdocs/luci-static/resources/icons/
-
-#删除danshui iStore应用，danshui的iStore目录名称为商店
-rm -rf ./feeds/danshui/luci-app-store
-#添加K大istore应用
-svn co https://github.com//kenzok8/openwrt-packages/trunk/luci-app-store ./package/luci-app-store
 
 
 # 编译多主题时,设置固件默认主题（可自行修改您要的,主题名称必须对,比如下面代码的[argon],和肯定编译了该主题,要不然进不了后台）
@@ -82,6 +59,10 @@ sed -i "/exit 0/i\sed -i '/coremark/d' /etc/crontabs/root" "$FIN_PATH"
 #sed -i 's/PATCHVER:=5.15/PATCHVER:=5.10/g' target/linux/x86/Makefile
 
 
+# 更改使用OpenClash的分支代码，把下面的master改成dev就使用dev分支，改master就是用master分支，改错的话就默认使用master分支
+echo "OpenClash_branch" > master
+
+
 # K3专用，编译K3的时候只会出K3固件（其他机型也适宜,把phicomm_k3和对应路径替换一下，名字要绝对正确才行）
 #sed -i 's|^TARGET_|# TARGET_|g; s|# TARGET_DEVICES += phicomm_k3|TARGET_DEVICES += phicomm_k3|' target/linux/bcm53xx/image/Makefile
 
@@ -102,12 +83,6 @@ sed -i 's/"USB 打印服务器"/"打印服务"/g' `egrep "USB 打印服务器" -
 sed -i 's/"Web 管理"/"Web管理"/g' `egrep "Web 管理" -rl ./`
 sed -i 's/"管理权"/"改密码"/g' `egrep "管理权" -rl ./`
 sed -i 's/"带宽监控"/"监控"/g' `egrep "带宽监控" -rl ./`
-
-#添加kenzok8插件包
-#sed -i '$a src-git smpackage https://github.com/kenzok8/openwrt-packages' feeds.conf.default
-
-#已修复，下面代码用不着
-#sed -i 's/PKG_HASH.*/PKG_HASH:=skip/' feeds/packages/utils/containerd/Makefile
 
 
 # 整理固件包时候,删除您不想要的固件或者文件,让它不需要上传到Actions空间（根据编译机型变化,自行调整需要删除的固件名称）
