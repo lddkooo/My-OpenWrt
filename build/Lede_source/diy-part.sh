@@ -47,7 +47,7 @@ sed -i "s/OpenWrt /${Author} compiled in $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt 
 sed -i '/CYXluq4wUazHjmCDBCqXF/d' "${ZZZ_PATH}"
 
 # Change default BackGround img
-wget -O ./danshui/luci-theme-argon/htdocs/luci-static/argon/img/bg1.jpg https://github.com/lddkooo/diy-OpenWrt/blob/main/BackGround/1.jpg
+#wget -O ./danshui/luci-theme-argon/htdocs/luci-static/argon/img/bg1.jpg https://github.com/lddkooo/diy-OpenWrt/blob/main/BackGround/1.jpg
 
 #删除danshui iStore应用，danshui的iStore目录名称为商店
 rm -rf ./feeds/danshui/luci-app-store
