@@ -52,7 +52,7 @@ sed -i '/CYXluq4wUazHjmCDBCqXF/d' "${ZZZ_PATH}"
 #删除danshui iStore应用，danshui的iStore目录名称为商店
 rm -rf ./feeds/danshui/luci-app-store
 #添加K大istore应用
-svn co https://github.com//kenzok8/openwrt-packages/trunk/luci-app-store ./package/luci-app-store
+svn co https://github.com/kenzok8/openwrt-packages/tree/master/luci-app-store ./package/luci-app-store
 
 # 删除默认防火墙
 #sed -i '/to-ports 53/d' "${ZZZ_PATH}"
